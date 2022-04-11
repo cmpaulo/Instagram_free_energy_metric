@@ -1,0 +1,4 @@
+ datetime
+ pandas==1.2.2
+ selenium==4.1.0
+ tabulate==0.8.9
