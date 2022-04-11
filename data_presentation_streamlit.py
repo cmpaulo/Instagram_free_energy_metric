@@ -1,8 +1,6 @@
 # integrar a analise de dados com a interação. 
 
 import pandas as pd
-import numpy as np
-from regex import F
 import streamlit as st
 import plotly.express as px
 
