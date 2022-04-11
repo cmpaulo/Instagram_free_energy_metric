@@ -2,7 +2,7 @@
 
 import pandas as pd
 import streamlit as st
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 data = pd.read_csv('15dias_postagem_seguidroes.csv',header=0,index_col=0)
 
@@ -28,15 +28,12 @@ sigbtt = st.sidebar.button("Realizar o gŕafico.")
 st.sidebar.write("Gráfico e tabela ao lado.")
 
 if sigbtt:
-
-    fig1 = px.bar(        
-            table,
-            x = "@Perfil",
-            y = sel_att,
-            title = f"{sel_att} vs @Perfil",
-            color= sel_att2,
-    )
-
-    st.plotly_chart(fig1)
+    
+    fig = plt.figure(figsize = (10, 5))
+    plt.bar(sel_att, sel_att2)
+    
+    plt.title(f"{sel_att2} vx {sel_att}")
+    
+    st.pyplot(fig)
 
     st.markdown(table.head(10).to_markdown())
