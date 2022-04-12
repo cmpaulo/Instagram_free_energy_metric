@@ -30,7 +30,7 @@ st.sidebar.write("Gráfico e tabela ao lado.")
 if sigbtt:
     
     fig = plt.figure(figsize = (10, 5))
-    plt.bar(sel_att, sel_att2)
+    plt.barh(table[sel_att], table[sel_att2])
     
     plt.title(f"{sel_att2} vx {sel_att}")
     
