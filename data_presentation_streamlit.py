@@ -36,6 +36,7 @@ if sigbtt:
     
     st.pyplot(fig)
 
-    st.write('Tabela do top 10 perfis com mais seguidores.')
-    
-    st.markdown(table.head(10).to_markdown(), unsafe_allow_html=True)
+
+st.write('Tabela do top 10 perfis com mais seguidores.')
+
+st.markdown(table.head(10).to_markdown(), unsafe_allow_html=True)
