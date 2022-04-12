@@ -29,11 +29,13 @@ st.sidebar.write("Gráfico e tabela ao lado.")
 
 if sigbtt:
     
-    fig = plt.figure(figsize = (10, 5))
+    fig = plt.figure(figsize = (12, 10))
     plt.barh(table[sel_att], table[sel_att2])
     
     plt.title(f"{sel_att2} vx {sel_att}")
     
     st.pyplot(fig)
 
+    st.write('Tabela do top 10 perfis com mais seguidores.')
+    
     st.markdown(table.head(10).to_markdown())
