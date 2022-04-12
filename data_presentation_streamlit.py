@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 data = pd.read_csv('15dias_postagem_seguidroes.csv',header=0,index_col=0)
 
+st.set_page_config(layout="wide")
 st.title('Perfis do Instagram que divulgam notícias sobre energias renováveis.')
 st.header("Interação com o banco de dados que foi criado baseado na #MercadoLivreDeEnergia")
 
@@ -29,7 +30,7 @@ st.sidebar.write("Gráfico e tabela ao lado.")
 
 if sigbtt:
     
-    fig = plt.figure(figsize = (12, 10))
+    fig = plt.figure(figsize = (10, 8))
     plt.barh(table[sel_att], table[sel_att2])
     
     plt.title(f"{sel_att2} vx {sel_att}")
