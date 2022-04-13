@@ -6,7 +6,7 @@ import plotly.express as px
 
 data = pd.read_csv('15dias_postagem_seguidroes.csv',header=0,index_col=0)
 
-# st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 st.title('Perfis do Instagram que divulgam notícias sobre energias renováveis.')
 st.header("Interação com o banco de dados que foi criado baseado na #MercadoLivreDeEnergia")
 
@@ -20,26 +20,50 @@ def load_table():
     
 table = load_table()
 
-sel_att = st.sidebar.selectbox('Escolha a coluna', table.keys())
+sel_att = st.selectbox('Escolha uma das', ['@Perfil vs NumeroSeguidores','@Perfil vs NumeroPostagens','@Perfil vs relacaoSegPost'])
+# @Perfil,NumeroSeguidores,NumeroPostagens,url,relacaoSegPost
 
-sel_att2 = st.sidebar.selectbox('Escolha a segunda coluna', table.keys())
+fig1 = px.bar(        
+        table,
+        x = sel_att.split('vs')[1].strip(),
+        y = "@Perfil",
+        title = sel_att,
+        orientation='h'
+        )
 
-sigbtt = st.sidebar.button("Realizar o gŕafico.")
-
-st.sidebar.write("Gráfico e tabela ao lado.")
-
-if sigbtt:
-    
-    fig1 = px.bar(        
-            table,
-            x = "@Perfil",
-            y = sel_att,
-            title = f"{sel_att} vs @Perfil",
-            color= sel_att2
+fig1.update_layout(
+    autosize=False,
+    width = 100,
+    height= 600,
+    margin=dict(
+        l=100,
+        r=300,
+        b=50,
+        t=50,
+        pad=3
+    )
     )
 
-    st.plotly_chart(fig1)
+st.plotly_chart(fig1, use_container_width=True)
 
-st.write('Tabela do top 10 perfis com mais seguidores.')
+sel_att2 = st.selectbox('Selecione ...', [" ","Toda Tabela","Top 10 Numero Seguidores","TOP 10 Numero de Postagens"])
 
-st.markdown(table.head(10).to_markdown(), unsafe_allow_html=True)
+if sel_att2 == "Top 10 Numero Seguidores":
+
+    st.write('Tabela do top 10 perfis com mais seguidores.')
+    st.markdown(table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].head(10).to_markdown())
+
+elif sel_att2 == "Top 10 Numero de Postagens":
+    
+    st.write('Tabela do top 10 perfis com mais postagens.')
+    top10= table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].sort_values('NumeroPostagens',ascending=False).reset_index().head(10)
+    top10 = top10.drop('index',axis=1)
+    st.markdown(top10.to_markdown())
+
+elif sel_att2 == "Toda Tabela":
+
+    st.write('Toda Tabela ordenda pelo perfil de maior numero de seguidores.')
+    st.markdown(table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].to_markdown())
+
+else:
+    pass
