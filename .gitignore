@@ -7,6 +7,10 @@ __pycache__/
 *.so
 # files of local folder
 login_out.txt
+Insta_scraps.ipynb
+scrap_profiles_from_tags_v2_0.py
+WebscrapingInstagram_v2_0.py
+login.txt
 
 # Distribution / packaging
 .Python
