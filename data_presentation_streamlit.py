@@ -1,10 +1,12 @@
 # integrar a analise de dados com a interação. 
 
 import pandas as pd
+from regex import X
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-data = pd.read_csv('15dias_postagem_seguidroes.csv',header=0,index_col=0)
 
 st.set_page_config(layout="wide")
 st.title('Perfis do Instagram que divulgam notícias sobre energias renováveis.')
@@ -46,24 +48,52 @@ fig1.update_layout(
 
 st.plotly_chart(fig1, use_container_width=True)
 
-sel_att2 = st.selectbox('Selecione ...', [" ","Toda Tabela","Top 10 Numero Seguidores","TOP 10 Numero de Postagens"])
+st.header("Compare o número de publicações e seguidores de cada um dos pefis listados")
 
-if sel_att2 == "Top 10 Numero Seguidores":
+list_pro = table['@Perfil'].sort_values().to_list()
+perfil2 = st.selectbox('Selecione um perfil', list_pro)
 
-    st.write('Tabela do top 10 perfis com mais seguidores.')
-    st.markdown(table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].head(10).to_markdown())
+perfil1 = st.selectbox('Selecione outro perfil', list_pro)
 
-elif sel_att2 == "Top 10 Numero de Postagens":
+
+# Create fig
+
+fig = go.Figure()
+fig.add_trace(go.Bar(y = ['NumeroSeguidores','NumeroPostagens'] , x = table.set_index('@Perfil').loc[perfil1, ['NumeroSeguidores','NumeroPostagens']].values, name=perfil1,orientation='h'))
+
+fig.add_trace(go.Bar(y = ['NumeroSeguidores','NumeroPostagens'] , x = table.set_index('@Perfil').loc[perfil2, ['NumeroSeguidores','NumeroPostagens']].values, name=perfil2,orientation='h'))
+
+chkbx = st.checkbox('barras empilhadas')
+if chkbx:
+    fig.update_layout(barmode='stack')  
+
+fig.update_layout(
+    title_text=f"Comparação do número de seguidores e postagens entre os perfis {perfil2} vs {perfil1}"
+    )   
+
+st.plotly_chart(fig, use_container_width=True)
+
+############################################### tabels
+
+st.header("Tabelas com os valores de cada perfil")
+
+sel_att2 = st.selectbox('Selecione para ver a lista de perfis', ["TOP 10 Seguidores","TOP 10 Postagens", "Toda Tabela"])
+
+st.markdown("Tabela disponível para baixar no [link](https://github.com/cmpaulo/Instagram_free_energy_metric/blob/main/lista_ordenada_15dias.csv)")
+
+if sel_att2 == "TOP 10 Seguidores":
     
-    st.write('Tabela do top 10 perfis com mais postagens.')
-    top10= table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].sort_values('NumeroPostagens',ascending=False).reset_index().head(10)
-    top10 = top10.drop('index',axis=1)
-    st.markdown(top10.to_markdown())
+    st.write('Tabela do top 10 perfis com mais seguidores.')
+    st.markdown(table[['@Perfil','NumeroSeguidores','url']].head(10).to_markdown())
 
-elif sel_att2 == "Toda Tabela":
-
+if sel_att2 == "Toda Tabela":
+    
     st.write('Toda Tabela ordenda pelo perfil de maior numero de seguidores.')
     st.markdown(table[['@Perfil','NumeroSeguidores','NumeroPostagens','relacaoSegPost','url']].to_markdown())
 
-else:
-    pass
+
+if sel_att2 == "TOP 10 Postagens":
+    st.write('Tabela do top 10 perfis com mais postagens.')
+    top = table[['@Perfil','NumeroPostagens','url']].sort_values('NumeroPostagens',ascending=False).reset_index().head(10)
+    top10 = top.drop('index',axis='columns')
+    st.markdown(top10.to_markdown())
