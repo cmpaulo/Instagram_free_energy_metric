@@ -1,11 +1,10 @@
 # integrar a analise de dados com a interação. 
 
 import pandas as pd
-from regex import X
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+
 
 
 st.set_page_config(layout="wide")
